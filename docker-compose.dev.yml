@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: predify_postgres_dev
+    environment:
+      POSTGRES_DB: predify_dev
+      POSTGRES_USER: predify_user
+      POSTGRES_PASSWORD: predify_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - predify_dev_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U predify_user -d predify_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js Application (Development)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: predify_app_dev
+    environment:
+      - NODE_ENV=development
+      - POSTGRES_URL=postgresql://predify_user:predify_password@postgres:5432/predify_dev?sslmode=disable
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=dev-secret-key-here
+    ports:
+      - "3300:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - predify_dev_network
+    restart: unless-stopped
+    command: pnpm dev
+
+volumes:
+  postgres_dev_data:
+
+networks:
+  predify_dev_network:
+    driver: bridge 
