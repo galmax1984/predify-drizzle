@@ -70,7 +70,15 @@ export function TournamentList({
                     <SidebarMenuSubItem key={matchDay.id}>
                     <SidebarMenuSubButton asChild>
                       <Link href={`/matchday/${matchDay.id}`} // or use router.push if using client navigation
-                          onClick={() => setSelectedMatchday(matchDay)}>
+                          onClick={() =>
+                            setSelectedMatchday({
+                              ...matchDay,
+                              fixtures: matchDay.fixtures.map(fx => ({
+                                ...fx,
+                                date: fx.scheduledDate, 
+                              })),
+                            })
+                          }>
                         <span>{matchDay.title}</span>
                       </Link>
                     </SidebarMenuSubButton>

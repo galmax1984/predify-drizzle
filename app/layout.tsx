@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={GeistSans.variable}>
         <SessionProvider>
           <SidebarProvider>
-            <div className="flex min-h-screen">
+            <div className="w-full flex min-h-screen">
               <AppSidebar />
               <div className="flex-1 flex flex-col w-full">
                 <Header />

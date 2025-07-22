@@ -175,13 +175,13 @@ function PredictionAccuracy({
     );
   } else if (correctOutcome) {
     return (
-      <Badge variant="secondary" className="bg-yellow-500 text-white text-xs">
+      <Badge variant="warning" className="bg-yellow-500 text-white text-xs">
         Outcome
       </Badge>
     );
   } else {
     return (
-      <Badge variant="destructive" className="text-xs">
+      <Badge variant="warning" className="text-xs">
         Wrong
       </Badge>
     );
@@ -248,8 +248,8 @@ function MatchCard({
           <div className="flex items-center justify-between">
             {/* Teams */}
             <div className="flex-1 space-y-1">
-              <div className="font-extralight text-sm">{fixture.homeTeam}</div>
-              <div className="font-extralight text-sm">{fixture.awayTeam}</div>
+              <div className="font-light text-sm">{fixture.homeTeam}</div>
+              <div className="font-light text-sm">{fixture.awayTeam}</div>
             </div>
 
             {/* Score/Prediction Section */}
@@ -286,7 +286,7 @@ function MatchCard({
                     </div>
                   ) : (
                     <Badge
-                      variant="outline"
+                      variant="warning"
                       className="font-extralight text-xs"
                     >
                       {fixture.time}
@@ -301,7 +301,7 @@ function MatchCard({
           {mode === "results" && (
             <div className="flex items-center justify-center">
               {fixture.status === "upcoming" && (
-                <Badge variant="secondary" className="font-extralight text-xs">
+                <Badge variant="warning" className="font-extralight text-xs">
                   {prediction
                     ? `Prediction: ${prediction.homeScore}-${prediction.awayScore}`
                     : "Upcoming"}
@@ -315,34 +315,6 @@ function MatchCard({
   );
 }
 
-function useCountdown(targetDate: Date) {
-  const [timeLeft, setTimeLeft] = useState("");
-
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const target = targetDate.getTime();
-      const difference = target - now;
-
-      if (difference > 0) {
-        const hours = Math.floor(difference / (1000 * 60 * 60));
-        const minutes = Math.floor(
-          (difference % (1000 * 60 * 60)) / (1000 * 60),
-        );
-        setTimeLeft(`${hours}h:${minutes.toString().padStart(2, "0")}m`);
-      } else {
-        setTimeLeft("0h:00m");
-      }
-    };
-
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 60000); // Update every minute
-
-    return () => clearInterval(interval);
-  }, [targetDate]);
-
-  return timeLeft;
-}
 
 export default function MatchFixtures({
   mode = "prediction",
@@ -369,13 +341,6 @@ export default function MatchFixtures({
     return localPredictions[fixture.id] || fixture.prediction;
   };
 
-  // Get the matchday deadline (first match starts July 21st at 17:00)
-  const getMatchdayDeadline = () => {
-    const deadline = new Date(2025, 6, 21, 17, 0, 0); // July 21st, 2025 at 17:00 (5:00 PM)
-    return deadline;
-  };
-
-  const countdown = useCountdown(getMatchdayDeadline());
 
   const handleSubmitPredictions = () => {
     // Collect all predictions
@@ -398,44 +363,6 @@ export default function MatchFixtures({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <h2 className="text-xl font-semibold text-foreground">
-            Matchday Fixtures
-          </h2>
-          <Badge variant="outline" className="font-extralight">
-            {mode === "prediction" ? "Prediction Mode" : "Results Mode"}
-          </Badge>
-          {mode === "prediction" && (
-            <Badge
-              variant="outline"
-              className="font-extralight text-red-600 border-red-600"
-            >
-              Time left to predict: {countdown}
-            </Badge>
-          )}
-        </div>
-        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <CalendarDays className="h-4 w-4" />
-          <span>Matchday 1</span>
-        </div>
-      </div>
-
-      {/* Submit Button for Prediction Mode */}
-      {mode === "prediction" && (
-        <div className="flex justify-center">
-          <Button
-            onClick={handleSubmitPredictions}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-8 py-2"
-            size="lg"
-          >
-            Submit All Predictions
-          </Button>
-        </div>
-      )}
-
-      {/* Fixtures Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {fixtures.map((fixture) => {
           const prediction = getPrediction(fixture);
@@ -453,6 +380,18 @@ export default function MatchFixtures({
           );
         })}
       </div>
+      {/* Submit Button for Prediction Mode */}
+      {mode === "prediction" && (
+        <div className="flex justify-center">
+          <Button
+            onClick={handleSubmitPredictions}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-8 py-2"
+            size="lg"
+          >
+            Submit All Predictions
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
