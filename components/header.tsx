@@ -5,8 +5,8 @@ import { SessionProvider } from 'next-auth/react';
 
 export default function Header() {
  return (
-    <header className="sticky flex justify-center border-b">
-      <div className="flex items-center justify-between w-full h-16 px-4 mx-auto sm:px-6">
+    <header className="w-full sticky flex justify-center border-b">
+      <div className="flex items-center justify-between w-full h-16 px-4 sm:px-6">
         <SidebarTrigger />
         <div className="ml-auto flex items-center space-x-4">
           <UserNav />

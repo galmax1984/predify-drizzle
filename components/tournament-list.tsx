@@ -1,4 +1,5 @@
 "use client"
+import { useTournamentStore } from "@/stores/tournamentStore";
 
 import { ChevronRight} from "lucide-react"
 import { CircleFlag } from 'react-circle-flags'
@@ -18,20 +19,32 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "./ui/sidebar"
+import Link from "next/link"
 
 export function TournamentList({
   tournaments,
 }: {
   tournaments: {
+    id: string
     title: string
-    url: string
-    isActive?: boolean
     matchDays?: {
+      id: string
       title: string
-      url: string
+      fixtures: {
+        id: string;
+        homeTeam: string
+        awayTeam: string
+        homeScore?: number
+        awayScore?: number
+        scheduledDate: string
+        scheduledTime: string
+        status: "scheduled" | "live" | "completed"
+      }[]
     }[]
   }[]
 }) {
+  const setSelectedMatchday = useTournamentStore((state) => state.setSelectedMatchday);
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>My Tournaments</SidebarGroupLabel>
@@ -40,7 +53,7 @@ export function TournamentList({
           <Collapsible
             key={tournament.title}
             asChild
-            defaultOpen={tournament.isActive}
+            defaultOpen={true}
             className="group/collapsible"
           >
             <SidebarMenuItem>
@@ -56,16 +69,10 @@ export function TournamentList({
                   {tournament.matchDays?.map((matchDay) => (
                     <SidebarMenuSubItem key={matchDay.id}>
                     <SidebarMenuSubButton asChild>
-                      <a
-                        href={`/matchday/${matchDay.id}`} // or use router.push if using client navigation
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Your logic to display matchday content, e.g.:
-                          // setSelectedMatchDay(matchDay.id);
-                        }}
-                      >
+                      <Link href={`/matchday/${matchDay.id}`} // or use router.push if using client navigation
+                          onClick={() => setSelectedMatchday(matchDay)}>
                         <span>{matchDay.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                   ))}

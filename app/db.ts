@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { eq, inArray } from 'drizzle-orm';
 
-import { tournaments, participants, tournamentParticipants, matchDays } from "../db/schema";
+import { tournaments, participants, tournamentParticipants, matchDays, fixtures } from "../db/schema";
 import { genSaltSync, hashSync } from "bcrypt-ts";
 
 const connectionString = `${process.env.POSTGRES_URL || "postgresql://predify_user:predify_password@localhost:5432/predify"}?sslmode=disable`;
@@ -65,16 +65,19 @@ export async function getParticipantTournaments(userId: string) {
   const leagueIds = userTournaments.map(t => t.leagueId);
   const allMatchDays = await db.select().from(matchDays).where(inArray(matchDays.leagueId, leagueIds));
 
+
   const matchDaysByLeague: Record<string, any[]> = {};
   for (const md of allMatchDays) {
     if (!matchDaysByLeague[md.leagueId]) matchDaysByLeague[md.leagueId] = [];
+    const fixturesOfMatchday = await db.select().from(fixtures).where(eq(fixtures.matchDayId, md.id));
     matchDaysByLeague[md.leagueId].push({
       id: md.id, 
       title: md.name,
       url: "", // or build a real URL if you have one
+      fixtures: (!fixturesOfMatchday) ? [] : fixturesOfMatchday
     });
   }
-
+  console.log('matchdays:', matchDaysByLeague);
   // Map tournaments to include their matchdays
   return userTournaments.map(t => ({
     title: t.name,

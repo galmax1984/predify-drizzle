@@ -12,6 +12,5 @@ export async function GET(req: Request) {
   }
 
   const tournaments = await getParticipantTournaments(session.user.id);
-  console.log("TOURNAMENTS:", tournaments);
   return NextResponse.json(tournaments);
 }
