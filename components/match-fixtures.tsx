@@ -231,86 +231,220 @@ function MatchCard({
   }`;
 
   return (
-    <Card className={cardClasses}>
-      <CardContent className="p-4">
+    // <Card className={`rounded-2xl border-0 h-full overflow-hidden bg-gradient-to-tr from-purple-100 to-purple-300`}>
+    //   {/* Black Header */}
+    //   <div className="bg-black text-white px-6 py-4">
+    //     <div className="flex items-center justify-between">
+    //       <span className="text-sm font-medium">{fixture.date}</span>
+    //       <div className="w-5 h-5 bg-white/20 rounded flex items-center justify-center">
+    //         <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+    //           <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+    //         </svg>
+    //       </div>
+    //     </div>
+    //   </div>
+
+    //   <CardContent className="p-6">
+    //     <div className="space-y-4">
+
+    //       {/* League/Competition */}
+    //       <div className="text-sm font-medium text-gray-700">
+    //         Premier League
+    //       </div>
+
+    //       {/* Match Title */}
+    //       <div className="space-y-1">
+    //         <h3 className="font-semibold text-lg text-gray-900 leading-tight">
+    //           {fixture.homeTeam}
+    //         </h3>
+    //         <div className="text-sm text-gray-600">vs</div>
+    //         <h4 className="font-semibold text-lg text-gray-900 leading-tight">
+    //           {fixture.awayTeam}
+    //         </h4>
+    //       </div>
+
+    //       {/* Logo/Icon */}
+    //       <div className="flex justify-end">
+    //         <div className={`w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center`}>
+    //           <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+    //             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+    //           </svg>
+    //         </div>
+    //       </div>
+
+    //       {/* Tags */}
+    //       <div className="flex flex-wrap gap-2">
+    //         <span className="px-2 py-1 bg-white/50 rounded-full text-xs font-medium text-gray-700">
+    //           {fixture.time}
+    //         </span>
+    //         <span className="px-2 py-1 bg-white/50 rounded-full text-xs font-medium text-gray-700">
+    //           Matchday {fixture.matchday}
+    //         </span>
+    //         {fixture.status === "finished" && (
+    //           <span className="px-2 py-1 bg-white/50 rounded-full text-xs font-medium text-gray-700">
+    //             Finished
+    //           </span>
+    //         )}
+    //       </div>
+
+    //       {/* Bottom section with prediction/result and action */}
+    //       <div className="flex items-center justify-between pt-2">
+    //         <div>
+    //           {mode === "prediction" ? (
+    //             <div className="flex items-center space-x-2">
+    //               <ScoreInput
+    //                 value={prediction?.homeScore}
+    //                 onChange={(value) =>
+    //                   onPredictionChange?.(value, prediction?.awayScore || 0)
+    //                 }
+    //                 disabled={fixture.status === "finished"}
+    //               />
+    //               <span className="text-gray-600">:</span>
+    //               <ScoreInput
+    //                 value={prediction?.awayScore}
+    //                 onChange={(value) =>
+    //                   onPredictionChange?.(prediction?.homeScore || 0, value)
+    //                 }
+    //                 disabled={fixture.status === "finished"}
+    //               />
+    //             </div>
+    //           ) : (
+    //             <div className="text-sm text-gray-600">
+    //               {fixture.result ? (
+    //                 <span className="font-bold text-gray-900">
+    //                   {fixture.result.homeScore}:{fixture.result.awayScore}
+    //                 </span>
+    //               ) : (
+    //                 <span>{fixture.time}</span>
+    //               )}
+    //             </div>
+    //           )}
+    //         </div>
+    //         <Button
+    //           size="sm"
+    //           className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-medium"
+    //         >
+    //           {mode === "prediction" ? "Predict" : "Details"}
+    //         </Button>
+    //       </div>
+
+    //       {/* Accuracy indicator for results mode */}
+    //       {mode === "results" && fixture.status === "finished" && prediction && (
+    //         <div className="flex justify-center">
+    //           <PredictionAccuracy
+    //             prediction={prediction}
+    //             result={fixture.result}
+    //           />
+    //         </div>
+    //       )}
+    //     </div>
+    //   </CardContent>
+    // </Card>
+
+
+    <Card className={`rounded-3xl border-1 border-l-black-100 h-full overflow-hidden bg-gradient-to-tr from-purple-100 to-purple-300`}>
+      <CardContent className="p-4 pb-8">
         <div className="space-y-4">
-          {/* Date and Time */}
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 text-xs text-muted-foreground">
-              <CalendarDays className="h-3 w-3" />
-              <span>{fixture.date}</span>
-              <Clock className="h-3 w-3" />
-              <span>{fixture.time}</span>
+          {/* Header with date and time - full width */}
+          <div className="w-full">
+            <div className="bg-white/90 backdrop-blur-sm px-4 py-0 rounded-full w-full text-center">
+              <span className="text-sm font-light text-gray-900 leading-4">
+                {fixture.date} • {fixture.time}
+              </span>
             </div>
           </div>
 
-          {/* Teams and Score Layout */}
-          <div className="flex items-center justify-between">
-            {/* Teams */}
-            <div className="flex-1 space-y-1">
-              <div className="font-light text-sm">{fixture.homeTeam}</div>
-              <div className="font-light text-sm">{fixture.awayTeam}</div>
-            </div>
-
-            {/* Score/Prediction Section */}
-            <div className="flex-shrink-0 ml-4">
-              {mode === "prediction" ? (
-                <div className="flex flex-col items-center space-y-1">
-                  <ScoreInput
-                    value={prediction?.homeScore}
-                    onChange={(value) =>
-                      onPredictionChange?.(value, prediction?.awayScore || 0)
-                    }
-                    disabled={fixture.status === "finished"}
-                  />
-                  <ScoreInput
-                    value={prediction?.awayScore}
-                    onChange={(value) =>
-                      onPredictionChange?.(prediction?.homeScore || 0, value)
-                    }
-                    disabled={fixture.status === "finished"}
-                  />
-                </div>
-              ) : (
-                <div className="text-center">
-                  {fixture.result ? (
-                    <div className="space-y-1">
-                      <div className="flex flex-col items-center">
-                        <span className="text-lg font-extralight">
-                          {fixture.result.homeScore}
-                        </span>
-                        <span className="text-lg font-extralight">
-                          {fixture.result.awayScore}
-                        </span>
-                      </div>
-                    </div>
-                  ) : (
-                    <Badge
-                      variant="warning"
-                      className="font-extralight text-xs"
-                    >
-                      {fixture.time}
-                    </Badge>
-                  )}
-                </div>
-              )}
-            </div>
+          {/* Match Title */}
+          <div className="text-left space-y-1">
+            <h3 className="font-light text-lg text-gray-900 leading-5">
+              {fixture.homeTeam}
+            </h3>
+            <h4 className="font-light text-lg text-gray-900 leading-5">
+              {fixture.awayTeam}
+            </h4>
           </div>
 
-          {/* Status */}
-          {mode === "results" && (
-            <div className="flex items-center justify-center">
-              {fixture.status === "upcoming" && (
-                <Badge variant="warning" className="font-extralight text-xs">
-                  {prediction
-                    ? `Prediction: ${prediction.homeScore}-${prediction.awayScore}`
-                    : "Upcoming"}
-                </Badge>
-              )}
-            </div>
-          )}
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 justify-center">
+            <span className="px-3 py-1 bg-black/10 backdrop-blur-sm rounded-full text-xs font-extralight text-gray-800 leading-4">
+              Matchday {fixture.matchday}
+            </span>
+            {fixture.status === "finished" && (
+              <span className="px-3 py-1 bg-black/10 backdrop-blur-sm rounded-full text-xs font-extralight text-gray-800 leading-4">
+                Final
+              </span>
+            )}
+            {mode === "prediction" && prediction && (
+              <span className="px-3 py-1 bg-black/10 backdrop-blur-sm rounded-full text-xs font-extralight text-gray-800 leading-4">
+                Predicted
+              </span>
+            )}
+          </div>
         </div>
       </CardContent>
+
+      {/* Bottom stripe section */}
+      <div className="bg-white/70 backdrop-blur-sm px-4 py-3 border-t border-white/30">
+        <div className="flex items-center justify-between">
+          <div>
+            {mode === "prediction" ? (
+              <div className="flex items-center space-x-2">
+                <ScoreInput
+                  value={prediction?.homeScore}
+                  onChange={(value) =>
+                    onPredictionChange?.(value, prediction?.awayScore || 0)
+                  }
+                  disabled={fixture.status === "finished"}
+                />
+                <span className="text-gray-800 font-extralight">:</span>
+                <ScoreInput
+                  value={prediction?.awayScore}
+                  onChange={(value) =>
+                    onPredictionChange?.(prediction?.homeScore || 0, value)
+                  }
+                  disabled={fixture.status === "finished"}
+                />
+              </div>
+            ) : (
+              <div>
+                {fixture.result ? (
+                  <div>
+                    <span className="text-lg font-extralight text-gray-900 leading-5">
+                      {fixture.result.homeScore}:{fixture.result.awayScore}
+                    </span>
+                    <div className="text-xs text-gray-600 mt-1 font-extralight leading-3">
+                      Final Score
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="text-base font-extralight text-gray-900 leading-5">{fixture.time}</span>
+                    <div className="text-xs text-gray-600 font-extralight leading-3">
+                      Kick Off
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <Button
+            size="sm"
+            className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-light leading-4"
+          >
+            Submit
+          </Button>
+        </div>
+
+        {/* Accuracy indicator for results mode */}
+        {mode === "results" && fixture.status === "finished" && prediction && (
+          <div className="flex justify-center mt-2">
+            <PredictionAccuracy
+              prediction={prediction}
+              result={fixture.result}
+            />
+          </div>
+        )}
+      </div>
     </Card>
   );
 }
@@ -363,7 +497,7 @@ export default function MatchFixtures({
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {fixtures.map((fixture) => {
           const prediction = getPrediction(fixture);
 
