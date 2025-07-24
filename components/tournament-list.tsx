@@ -1,7 +1,7 @@
 "use client"
 import { useTournamentStore } from "@/stores/tournamentStore";
 
-import { ChevronRight} from "lucide-react"
+import { BarChart3, ChevronRight} from "lucide-react"
 import { CircleFlag } from 'react-circle-flags'
 
 import {
@@ -20,6 +20,7 @@ import {
   SidebarMenuSubItem,
 } from "./ui/sidebar"
 import Link from "next/link"
+import { usePathname } from "next/navigation";
 
 export function TournamentList({
   tournaments,
@@ -44,6 +45,7 @@ export function TournamentList({
   }[]
 }) {
   const setSelectedMatchday = useTournamentStore((state) => state.setSelectedMatchday);
+  const pathname = usePathname();
 
   return (
     <SidebarGroup>
@@ -66,10 +68,32 @@ export function TournamentList({
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <SidebarMenuSub>
+                <div className="mb-1">
+                  <Link
+                    href="/standings"
+                    className={
+                      "group flex items-center px-1 py-1 text-sm font-medium rounded-md transition-colors " +
+                      (pathname === "/standings"
+                        ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50")
+                    }
+                  >
+                    <BarChart3 className="mr-3 h-3 w-3 flex-shrink-0" />
+                    Standings
+                  </Link>
+                </div>
+                </SidebarMenuSub>
+                <SidebarMenuSub>
                   {tournament.matchDays?.map((matchDay) => (
                     <SidebarMenuSubItem key={matchDay.id}>
                     <SidebarMenuSubButton asChild>
-                      <Link href={`/matchday/${matchDay.id}`} // or use router.push if using client navigation
+                      <Link className={
+                      "group flex items-center px-1 py-1 text-sm font-medium rounded-md transition-colors " +
+                          (pathname === `/matchday/${matchDay.id}`
+                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                            : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50")
+                          }
+                            href={`/matchday/${matchDay.id}`} // or use router.push if using client navigation
                           onClick={() =>
                             setSelectedMatchday({
                               ...matchDay,
