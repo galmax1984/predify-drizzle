@@ -1,7 +1,7 @@
 "use client"
 import { useTournamentStore } from "@/stores/tournamentStore";
 
-import { BarChart3, ChevronRight} from "lucide-react"
+import { BarChart3, ChevronRight, Trophy, Volleyball} from "lucide-react"
 import { CircleFlag } from 'react-circle-flags'
 
 import {
@@ -49,7 +49,6 @@ export function TournamentList({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>My Tournaments</SidebarGroupLabel>
       <SidebarMenu>
         {Array.isArray(tournaments) && tournaments.map((tournament) => (
           <Collapsible
@@ -61,8 +60,8 @@ export function TournamentList({
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={tournament.title}>
-                  <CircleFlag countryCode="eu" height={15} width={15} />
-                  <span>{tournament.title}</span>
+                  <CircleFlag countryCode="es" height={20} width={20} />
+                  <span className="px-1 py-1 text-sm font-medium rounded-md ">{tournament.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
@@ -78,7 +77,7 @@ export function TournamentList({
                         : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50")
                     }
                   >
-                    <BarChart3 className="mr-3 h-3 w-3 flex-shrink-0" />
+                    <Trophy className="mr-3 h-5 w-5 flex-shrink-0" />
                     Standings
                   </Link>
                 </div>
@@ -103,6 +102,7 @@ export function TournamentList({
                               })),
                             })
                           }>
+                        <Volleyball className="mr-3 h-3 w-3 flex-shrink-0"/>    
                         <span>{matchDay.title}</span>
                       </Link>
                     </SidebarMenuSubButton>
