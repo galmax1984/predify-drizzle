@@ -32,7 +32,7 @@ const sampleFixtures: MatchFixture[] = [
     id: "1",
     homeTeam: "Manchester United",
     awayTeam: "Liverpool",
-    date: "Jul 20, 2025",
+    date: "Jul 25, 2025",
     time: "3:00 PM",
     status: "upcoming",
     matchday: 1,
@@ -42,12 +42,11 @@ const sampleFixtures: MatchFixture[] = [
     id: "2",
     homeTeam: "Arsenal",
     awayTeam: "Chelsea",
-    date: "Jul 20, 2025",
+    date: "Jul 25, 2025",
     time: "5:30 PM",
-    status: "finished",
+    status: "upcoming",
     matchday: 1,
     prediction: { homeScore: 1, awayScore: 2 },
-    result: { homeScore: 0, awayScore: 3 },
   },
   {
     id: "3",
@@ -215,20 +214,25 @@ function MatchCard({
   prediction?: { homeScore: number; awayScore: number };
   onPredictionChange?: (homeScore: number, awayScore: number) => void;
 }) {
-    mode = "prediction";
-    fixture.result = {
-        homeScore: 1,
-        awayScore: 4
+
+    const handleSubmit = () => {
+    // To save prediction
+        alert(`Prediction submitted for ${fixture.homeTeam} vs ${fixture.awayTeam}`);
+        };
+
+    let submitPredictionButton = null;
+    if (fixture.status === "upcoming") {
+        submitPredictionButton = (
+        <Button
+            size="sm"
+            className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-light leading-4"
+            onClick={handleSubmit}
+            disabled={!prediction} // Disable if no prediction entered
+        >
+            Submit
+        </Button>
+        );
     }
-  const accuracyColor =
-    fixture.status === "finished" && mode === "results"
-      ? getAccuracyColor(prediction, fixture.result)
-      : "";
-
-  const cardClasses = `rounded-lg border border-border h-full ${
-    accuracyColor ? `border-l-4 ${accuracyColor}` : ""
-  }`;
-
   return (
     <Card className={`rounded-3xl border-1 border-l-black-100 h-full overflow-hidden bg-gradient-to-tr from-purple-100 to-purple-300`}>
       <CardContent className="p-4 pb-8">
@@ -299,8 +303,9 @@ function MatchCard({
                 <span className="text-gray-800 font-extralight">:</span>
                 <ScoreInput
                   value={prediction?.awayScore}
-                  onChange={(value) =>
-                    onPredictionChange?.(prediction?.homeScore || 0, value)
+                  onChange={(value) => {
+                        onPredictionChange?.(prediction?.homeScore || 0, value)
+                    }
                   }
                   disabled={fixture.status === "finished"}
                 />
@@ -327,12 +332,11 @@ function MatchCard({
               </div>
             )}
           </div>
-          <Button
-            size="sm"
-            className="bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-light leading-4"
-          >
-            Submit
-          </Button>
+          <div className=" px-2 py-1 border-t border-white/30">
+            <div className="flex items-center justify-end">
+                {submitPredictionButton}
+            </div>
+          </div>
         </div>
 
         {/* Accuracy indicator for results mode */}
@@ -351,7 +355,7 @@ function MatchCard({
 
 
 export default function MatchFixtures({
-  mode = "results",
+  mode,
   fixtures = sampleFixtures
 }: MatchFixturesProps) {
   const [localPredictions, setLocalPredictions] = useState<
